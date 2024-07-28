@@ -12,7 +12,7 @@ export const Navbar = () => {
 
          <div className='lg;mr-10 cursor-pointer flex items-center spacz-x-4'>
             <li className='logo font-semibold text-gray-300 text-2x1'>
-                imane food
+                Tasty Dash
             </li>
          </div>
       
