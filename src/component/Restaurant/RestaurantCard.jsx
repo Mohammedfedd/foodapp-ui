@@ -5,13 +5,13 @@ import FavoriteBorderIcon  from "@mui/icons-material/FavoriteBorder";
 
 const RestaurantCard = () => {
     return(
-        <Card className='w-[18rem] '>
+        <Card className="w-[18rem]">
         
         <div className={`${true ? 'cursor-pointer' : 'cursor-not-allowed'} relative`}>
             
             <img 
             className="w-full h-[10rem] rounded-t-md object-cover"
-            src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.foodiesfeed.com%2F&psig=AOvVaw1D_cuAK3N0blhPwjWqFn1G&ust=1722374204896000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCKCX7IqWzYcDFQAAAAAdAAAAABAE"
+            src="http://res.cloudinary.com/dcpesbd8q/image/upload/v1707802815/ux3xq93xzfbqhtudigv2.jpg"
              alt="" />
         <Chip
         

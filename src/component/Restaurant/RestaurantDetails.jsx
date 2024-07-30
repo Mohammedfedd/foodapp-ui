@@ -5,11 +5,11 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import MenuCard from "./MenuCard";
 
 const categories=[
-    "pizza",
-    "salade",
-    "burger",
-    "chiken",
-    "rice"
+    "Pizza",
+    "Burger",
+    "Shawarma",
+    "Sandwich",
+    "Chicken Wings"
 ]
 
 const foodTypes=[
@@ -32,21 +32,18 @@ const RestaurantDetails = () =>{
                 <h3 className="text-gray-500 py-2 mt-10">Home/maroc/fast food/3</h3>
                  <div>
                     <Grid container spacing={2}>
-                        <Gid item xs={12}>
+                        <Grid item xs={12}>
                            <img className="w-full h-[40vh] object-cover" src="http://res.cloudinary.com/dcpesbd8q/image/upload/v1707802815/ux3xq93xzfbqhtudigv2.jpg" alt="" />
-                        </Gid>
-                    </Grid>
-                    <Grid container spacing={2}>
-                        <Gid item xs={12} lg={6}>
-                           <img className="w-full h-[40vh] object-cover" src="http://res.cloudinary.com/dcpesbd8q/image/upload/v1707802815/ux3xq93xzfbqhtudigv2.jpg" alt="" /> 
-                           {/* il faut changer src d'image */}
-                        </Gid>
-                    </Grid>
-                    <Grid container spacing={2}>
-                        <Gid item xs={12} lg={6}>
+                        </Grid>
+                        <Grid item xs={12} lg={6} >
                            <img className="w-full h-[40vh] object-cover" src="http://res.cloudinary.com/dcpesbd8q/image/upload/v1707802815/ux3xq93xzfbqhtudigv2.jpg" alt="" />
-                        </Gid>
+                        </Grid>
+                        <Grid item xs={12} lg={6} >
+                           <img className="w-full h-[40vh] object-cover" src="http://res.cloudinary.com/dcpesbd8q/image/upload/v1707802815/ux3xq93xzfbqhtudigv2.jpg" alt="" />
+                        </Grid>
                     </Grid>
+                   
+                        
                  </div>
                  <div className="pt-3 pb-5">
                     <h1 className="text-4xl font-semibold ">Fast Food</h1>
