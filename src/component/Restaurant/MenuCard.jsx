@@ -1,9 +1,15 @@
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Checkbox, FormControlLabel, FormGroup} from "@mui/material";
 import React from "react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore"; 
- 
-const  ingredients=[
-    {}
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+const  demo=[
+    {
+        category:"Nuts & Seeds",
+        ingredients:["Cashews"]
+    },
+    {
+        category:"Protein",
+        ingredients:["Ground Beef","Chicken"]
+    },
 ]
 const MenuCard =() =>{
     return(
@@ -29,19 +35,28 @@ const MenuCard =() =>{
 
           </div>
         </AccordionSummary>
-        <AccordionDetails>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui quasi 
-            nulla nobis officiis impedit. Reiciendis, molestias. Odit, impedit 
-            eligendi expedita, minus repellat necessitatibus doloremque maiores
-             hic ea veniam exercitationem? Repudiandae!
-        </AccordionDetails>
-       </Accordion>
-        
+           <AccordionDetails>
+               <form>
+                   <div className="flex gap-5 flex-wrap">
+                       {
+                           demo.map((item) =>
+                               <div>
+                                   <p>{item.category}</p>
+                                   <FormGroup>
+                                       <FormControlLabel control={<Checkbox defaultChecked/>} label="Label"/>
+                                   </FormGroup>
+                               </div>
+                           )
 
+                       }
+                   </div>
+               </form>
+           </AccordionDetails>
+       </Accordion>
 
 
     )
-    
+
 
 }
 export default MenuCard
