@@ -1,4 +1,4 @@
-import {Accordion, AccordionDetails, AccordionSummary, Checkbox, FormControlLabel, FormGroup} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Checkbox, FormControlLabel, FormGroup,Button} from "@mui/material";
 import React from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 const  demo=[
@@ -12,6 +12,9 @@ const  demo=[
     },
 ]
 const MenuCard =() =>{
+    const handlecheckBoxChange=(value)=>{
+        console.log("value")
+    }
     return(
        <Accordion>
         <AccordionSummary 
@@ -43,12 +46,15 @@ const MenuCard =() =>{
                                <div>
                                    <p>{item.category}</p>
                                    <FormGroup>
-                                       <FormControlLabel control={<Checkbox defaultChecked/>} label="Label"/>
+                                       {item.ingredients.map((item)=> <FormControlLabel control={<Checkbox onChange={()=>handlecheckBoxChange}/>} label={item}/>)}
                                    </FormGroup>
                                </div>
                            )
 
                        }
+                   </div>
+                   <div className="pt-5">
+                    <Button variant="contained" disabled={false} type="submit">{true?"Add to Cart":"Out of Strock"}</Button>
                    </div>
                </form>
            </AccordionDetails>
