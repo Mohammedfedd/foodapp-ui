@@ -6,16 +6,16 @@ import AccountBalanceWalletIcon from '@material-ui/AccountBalanceWalletIcon';
 import NotificationActiveIcon from '@mui/icons-material/NotificationActiveIcon';
 import EventIcon from '@mui/icons-material/EventIcon';
 import LoguoutIcon from '@mui/icons-material/LoguoutIcon';
-import { AddReaction } from '@mui/icons-material';
+import AddReactionIcon from '@mui/icons-material/AddReaction';
 import { AccountBalanceWallet } from '@material-ui/icons';
-import { Drawer } from '@mui/material';
+import Drawer from '@mui/material/Drawer';
 
 const menu=[ 
     {title:"Orders",icon:<ShoppingBagIcon/>},
     {title:"Favorite",icon:<FavoriteIcon/>},
-    {title:"Address",icon:<AddReaction/>},
+    {title:"Address",icon:<AddReactionIcon/>},
     {title:"Payments",icon:<AccountBalanceWallet/>},
-    {title:"Events",icon:<EventsIcon/>},
+    {title:"Events",icon:<EventIcon/>},
     {title:"Logout",icon:<LoguoutIcon/>},
 ]
 export const ProfileNavigation = ({open,handleClose}) => {
@@ -33,7 +33,9 @@ export const ProfileNavigation = ({open,handleClose}) => {
               justify-center text-xl gap-8 pt-16'>
 {menu.map((item)=> <>
 
-<div></div>
+<div>
+    
+</div>
 </>)}
              </div>
              </Drawer>
