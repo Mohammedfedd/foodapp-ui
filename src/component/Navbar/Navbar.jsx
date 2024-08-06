@@ -8,7 +8,9 @@ import "./Navbar.css"
 
 export const Navbar = () => {
   return (
-  <div className='px-5 z-50 py-[.8rem] bg-[#e91e63] lg:px-20 flex justify-between'>
+  <Box 
+   
+   className='px-5 sticky top-0 z-50 py-[.8rem] bg-[#e91e63] lg:px-20 flex justify-between'>
 
          <div className='lg;mr-10 cursor-pointer flex items-center spacz-x-4'>
             <li className='logo font-semibold text-gray-300 text-2x1'>
@@ -34,6 +36,6 @@ export const Navbar = () => {
           </IconButton>
       </div>
       </div>
-  </div>
+  </Box>
   )
 }
