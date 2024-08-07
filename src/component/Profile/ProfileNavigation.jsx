@@ -11,11 +11,13 @@ import { AccountBalanceWallet } from '@material-ui/icons';
 import Drawer from '@mui/material/Drawer';
 import {Divider, useMediaQuery} from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {logout} from "../State/Authentication/Action";
 
 
 const menu=[ 
     {title:"Orders",icon:<ShoppingBagIcon/>},
-    {title:"Favorite",icon:<FavoriteIcon/>},
+    {title:"Favorites",icon:<FavoriteIcon/>},
     {title:"Address",icon:<AddReactionIcon/>},
     {title:"Payments",icon:<AccountBalanceWallet/>},
     {title:"Events",icon:<EventIcon/>},
@@ -24,8 +26,14 @@ const menu=[
 export const ProfileNavigation = ({open,handleClose}) => {
     const isSmallScreen = useMediaQuery('(max-width:900px)');
     const navigate=useNavigate();
+    const dispatch=useDispatch();
 
     const handleNavigate=(item)=>  {
+        if(item.title==="Logout"){
+            dispatch(logout());
+            navigate("/")
+        }
+        else
         navigate(`/my-profile/${item.title.toLowerCase()}`);
 
       
@@ -43,7 +51,7 @@ export const ProfileNavigation = ({open,handleClose}) => {
              sx={{zIndex: 1 , position:"sticky"}}
              >
              <div className="w-[50vw] lg:w-[20vw] h-[100vh] flex flex-col
-              justify-center text-xl pt-16 gap-12">
+              justify-center text-xl pt-11 gap-11">
 {menu.map((item,i)=>(
     <>
 

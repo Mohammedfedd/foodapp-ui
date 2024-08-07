@@ -1,17 +1,18 @@
-import React from 'react'
-import RestaurantCard from '../Restaurant/RestaurantCard'
+import React from 'react';
+import RestaurantCard from '../Restaurant/RestaurantCard';
+import { useSelector } from "react-redux";
 
-export default function Favorites () {
-return(
-    <div>
-      
-      <h1 className='py-5 text-xl font-semibold text-center'> My Favorites </h1>
-      <div className='flex flex-wrap gap-3 justify-center'>
-        {
-            [1,1,1].map((item)=><RestaurantCard />)
-        }
-      </div>
-    </div>
-)
+export default function Favorites() {
+    const { auth } = useSelector(store => store);
 
+    return (
+        <div>
+            <h1 className='py-5 text-xl font-semibold text-center'>My Favorites</h1>
+            <div className='flex flex-wrap gap-3 justify-center'>
+                {auth.favorites?.map(item => (
+                    <RestaurantCard key={item.id} item={item} />
+                ))}
+            </div>
+        </div>
+    );
 }
