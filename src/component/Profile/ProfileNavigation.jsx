@@ -2,13 +2,16 @@ import React from 'react'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HomeIcon from '@mui/icons-material/Home';
-import AccountBalanceWalletIcon from '@material-ui/AccountBalanceWalletIcon';
-import NotificationActiveIcon from '@mui/icons-material/NotificationActiveIcon';
-import EventIcon from '@mui/icons-material/EventIcon';
-import LoguoutIcon from '@mui/icons-material/LoguoutIcon';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import EventIcon from '@mui/icons-material/Event';
+import LogoutIcon from '@mui/icons-material/Logout';
 import AddReactionIcon from '@mui/icons-material/AddReaction';
 import { AccountBalanceWallet } from '@material-ui/icons';
 import Drawer from '@mui/material/Drawer';
+import {Divider, useMediaQuery} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 
 const menu=[ 
     {title:"Orders",icon:<ShoppingBagIcon/>},
@@ -16,44 +19,46 @@ const menu=[
     {title:"Address",icon:<AddReactionIcon/>},
     {title:"Payments",icon:<AccountBalanceWallet/>},
     {title:"Events",icon:<EventIcon/>},
-    {title:"Logout",icon:<LoguoutIcon/>},
+    {title:"Logout",icon:<LogoutIcon/>},
 ]
 export const ProfileNavigation = ({open,handleClose}) => {
     const isSmallScreen = useMediaQuery('(max-width:900px)');
     const navigate=useNavigate();
 
     const handleNavigate=(item)=>  {
-        navigate('/my-profile/${item.title.toLowerCase()}')
+        navigate(`/my-profile/${item.title.toLowerCase()}`);
 
       
 
     }
 
     return (
-        <div>
+        <React.Fragment>
+
              <Drawer
-               variant={isSmallScreen ?"temporary" : "permanent"}
-             onClose={handleClose} 
-             open={isSmallScreen ? open : true} 
-            
-             anchor="left"
-             sx={{zIndex: -1 , position:"sticky"}}
+             variant={isSmallScreen ? "temporary" : "permanent"}
+             onClose={handleClose}
+             open={isSmallScreen ? open : true}
+             anchor={"left"}
+             sx={{zIndex: 1 , position:"sticky"}}
              >
-             <div className='w-[50vw] lg:w-[20vw] h-[100vh] flex flex-col
-              justify-center text-xl pt-16 gap-8 '>
-{menu.map((item)=> <>
+             <div className="w-[50vw] lg:w-[20vw] h-[100vh] flex flex-col
+              justify-center text-xl pt-16 gap-12">
+{menu.map((item,i)=>(
+    <>
 
 <div onClick={()=>handleNavigate(item)} className='px-5 flex items-center space-x-5 cursor-pointer'>
     {item.icon}
     <span> {item.title}</span>
 </div>
  {i!==menu.length-1 && <Divider/>}
-</>)}
+</>
+))}
              </div>
              </Drawer>
+        </React.Fragment>
 
-        
-        </div>
+
     );
 };
 

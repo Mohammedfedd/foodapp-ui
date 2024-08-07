@@ -6,7 +6,7 @@ import AddLocationIcon from '@material-ui/icons/AddLocation';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 //import * as Yup from "yup"
 
-const style = {
+export const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -121,12 +121,7 @@ const Cart = () => {
                                        label="Street Address"
                                        fullWidth
                                        variant="outlined"
-                                       // error={!ErrorMessage("streetAddress")}
-                                       //helperText={
-                                       //    <ErrorMessage>
-                                       //        {(msg)=> <span className="text-red-600">{msg}</span>}
-                                       //    </ErrorMessage>
-                                       // }
+
                                    />
                                </Grid>
                                <Grid item xs={12}>

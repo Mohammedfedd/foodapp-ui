@@ -4,7 +4,7 @@ import { UserProfile} from './UserProfile'
 import {Routes ,Route  } from 'react-router-dom'
 import { Orders } from './Orders';
 import { Address } from './Address';
-import { Favorites } from './Favorites';
+import Favorites from './Favorites';
 import { Events } from './Events';
 const Profile = () => {
     const [openSideBar, setOpenSideBar]=useState(false);

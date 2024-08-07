@@ -12,13 +12,8 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
-{/* <Navbar/>     */}
-   {/* <Home/> */}
-   {/*<RestaurantDetails/>*/}
-   {/*<Cart/>*/}
-   {/* <Profile/> */}
 
-   <CustomerRoute/>
+        {<CustomerRoute/>}
   
     </ThemeProvider>
   );
