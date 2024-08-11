@@ -11,7 +11,6 @@ import { CustomerRoute } from './Routers/CustomerRoute';
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getUser} from "./component/State/Authentication/Action";
-import Routers from "./Routers/SuperAdminRoute";
 function App() {
     const dispatch=useDispatch();
     const jwt=localStorage.getItem("jwt")
@@ -24,7 +23,7 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
 
-        {<Routers/>}
+        {<CustomerRoute/>}
   
     </ThemeProvider>
   );

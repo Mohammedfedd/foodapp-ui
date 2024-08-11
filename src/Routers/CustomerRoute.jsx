@@ -25,7 +25,6 @@ export const CustomerRoute=() => {
             <Auth/>
         </div>
     )
-}
-export default CustomerRoute
+} 
 
 // /my-profile/orders
