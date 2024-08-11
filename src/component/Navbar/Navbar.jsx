@@ -13,12 +13,12 @@ export const Navbar = () => {
     const {auth}=useSelector(store=>store);
     const navigate=useNavigate();
     const handleAvatarClick=()=>{
-        if(auth.user?.role==="ROLE_CUSTOMER"){
-            navigate("/my-profile")
-        }
-        else
-        {
-            navigate("/admin/restaurant")
+        if (auth.user?.role === "ROLE_ADMIN") {
+            navigate("/super-admin");
+        } else if (auth.user?.role === "ROLE_RESTAURANT_OWNER") {
+            navigate("/admin/restaurant");
+        } else {
+            navigate("/my-profile");
         }
     }
   return (

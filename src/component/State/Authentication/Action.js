@@ -14,12 +14,14 @@ export const registerUser=(reqData)=>async(dispatch)=>{
     try {
         const {data}=await axios.post(`${API_URL}/auth/signup`,reqData.userData)
         if(data.jwt)localStorage.setItem("jwt",data.jwt);
-        if(data.role==="ROLE_RESTAURANT_OWNER"){
-            reqData.navigate("/admin/restaurant")
+        if (data.role === "ROLE_RESTAURANT_OWNER") {
+            reqData.navigate("/admin/restaurant");
+        } else if (data.role === "ROLE_ADMIN") {
+            reqData.navigate("/super-admin");
+        } else {
+            reqData.navigate("/");
         }
-        else{
-            reqData.navigate("/")
-        }
+
         dispatch({type:REGISTER_SUCCESS,payload:data.jwt})
         console.log("register sucess",data)
 
