@@ -23,10 +23,12 @@ import {getCustomers} from "../component/State/SuperAdmin/Action";
         const { auth, restaurant, ingredients } = useSelector((store) => store);
         const jwt = localStorage.getItem("jwt");
         useEffect(() => {
-            dispatch(
-                getCustomers({jwt, id: Customers.id})
-            );
-        })
+
+                dispatch(
+                    getCustomers({ jwt: localStorage.getItem("jwt") })
+                );
+
+        }, []);
         return (
             <div className="lg:flex justify-between">
                 <div className="">
@@ -36,7 +38,7 @@ import {getCustomers} from "../component/State/SuperAdmin/Action";
 
                 <div className="w-[80vw]">
                     <Routes>
-                        <Route path="/" element={<SuperAdminDashboard/>}/>
+                        <Route path="/" element={<SuperAdminDashboard/>}></Route>
                         <Route path="/customers" element={<Customers/>}></Route>
                         <Route path="/restaurants" element={<SuperAdminRestaurant/>}></Route>
                         <Route path="/restaurant-request" element={<RestaurantRequest/>}></Route>
