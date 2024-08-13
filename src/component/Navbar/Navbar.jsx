@@ -64,6 +64,7 @@ export const Navbar = () => {
     const handleLogout = () => {
         dispatch(logout());
         handleCloseMenu();
+        navigate("/")
     };
 
     return (
@@ -93,7 +94,7 @@ export const Navbar = () => {
                             aria-haspopup="true"
                             aria-expanded={open ? "true" : undefined}
                             onClick={
-                                auth.user?.role === "ROLE_ADMIN"
+                                auth.user?.role === "ROLE_ADMIN" || auth.user?.role === "ROLE_RESTAURANT_OWNER"
                                     ? handleOpenMenu
                                     : navigateToProfile
                             }
@@ -122,7 +123,12 @@ export const Navbar = () => {
                                 if (auth.user?.role === "ROLE_ADMIN") {
                                     navigate("/super-admin");
                                 }
-                            }}
+                                else if (auth.user?.role==="ROLE_RESTAURANT_OWNER")
+                                {
+                                    navigate("/admin/restaurants");
+                            }
+                            }
+                        }
                         >
                             Profile
                         </MenuItem>

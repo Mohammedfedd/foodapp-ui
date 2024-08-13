@@ -13,111 +13,125 @@ import {
     TableHead,
     TableRow,
     Typography,
-  } from "@mui/material";
-  
-  import React, { useEffect } from "react";
-  import { useParams } from "react-router-dom";
-  
-  import { useDispatch, useSelector } from "react-redux";
- // import { getMenuItemsByRestaurantId } from "../../State/Customers/Menu/menu.action";
-  
-  const RestaurantRequestTable = ({ isDashboard, name }) => {
+} from "@mui/material";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    approveRestaurantRequest,
+    rejectRestaurantRequest,
+    getPendingRestaurants
+} from "../../component/State/SuperAdmin/Action"; // Update path to your action file
+
+const RestaurantRequestTable = ({ isDashboard, name }) => {
     const dispatch = useDispatch();
-    const { menu } = useSelector((store) => store);
-    // const { id } = useParams();
-  
+    const { requests, loading } = useSelector((store) => store.restaurantRequests);
+
     useEffect(() => {
-      
-    }, []);
-  
-    const handleDeleteProduct = (productId) => {
-      console.log("delete product ", productId);
+        // Fetch the restaurant requests when the component mounts
+        dispatch(getPendingRestaurants());
+    }, [dispatch]);
+
+    const handleApproveRequest = (requestId) => {
+        console.log("Approve request ", requestId);
+        dispatch(approveRestaurantRequest(requestId));
     };
-  
+
+    const handleRejectRequest = (requestId) => {
+        console.log("Reject request ", requestId);
+        dispatch(rejectRestaurantRequest(requestId));
+    };
+
     return (
-      <Box width={"100%"}>
-        <Card className="mt-1">
-          <CardHeader
-            title={name}
-            sx={{
-              pt: 2,
-              alignItems: "center",
-              "& .MuiCardHeader-action": { mt: 0.6 },
-            }}
-          />
-          <TableContainer>
-            <Table  aria-label="table in dashboard">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Image</TableCell>
-                  <TableCell>Title</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>Category</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>Price</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>Quantity</TableCell>
-                  {!isDashboard && <TableCell sx={{ textAlign: "center" }}>Delete</TableCell>}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {menu.menuItems.slice(0,isDashboard?7:menu.menuItems.length).map((item) => (
-                  <TableRow
-                    hover
-                    key={item.name}
-                    sx={{ "&:last-of-type td, &:last-of-type th": { border: 0 } }}
-                  >
-                    <TableCell>
-                      {" "}
-                      <Avatar alt={item.name} src={item.imageUrl} />{" "}
-                    </TableCell>
-  
-                    <TableCell
-                      sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}
-                    >
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
-                        <Typography
-                          sx={{
-                            fontWeight: 500,
-                            fontSize: "0.875rem !important",
-                          }}
-                        >
-                          {item.name}
-                        </Typography>
-                        <Typography variant="caption">{item.brand}</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {item.category.name}
-                    </TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      ₹{item.price}
-                    </TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {item.quantity || 10}
-                    </TableCell>
-  
-                    {!isDashboard && <TableCell sx={{ textAlign: "center" }}>
-                      <Button
-                        variant="text"
-                        onClick={() => handleDeleteProduct(item._id)}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell>}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Card>
-  
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={menu.loading}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      </Box>
+        <Box width={"100%"}>
+            <Card className="mt-1">
+                <CardHeader
+                    title={name}
+                    sx={{
+                        pt: 2,
+                        alignItems: "center",
+                        "& .MuiCardHeader-action": { mt: 0.6 },
+                    }}
+                />
+                <TableContainer>
+                    <Table aria-label="restaurant requests table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Image</TableCell>
+                                <TableCell>Name</TableCell>
+                                <TableCell sx={{ textAlign: "center" }}>Cuisine Type</TableCell>
+                                <TableCell sx={{ textAlign: "center" }}>Location</TableCell>
+                                <TableCell sx={{ textAlign: "center" }}>Status</TableCell>
+                                <TableCell sx={{ textAlign: "center" }}>Actions</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {requests.slice(0, isDashboard ? 7 : requests.length).map((request) => (
+                                <TableRow
+                                    hover
+                                    key={request._id}
+                                    sx={{ "&:last-of-type td, &:last-of-type th": { border: 0 } }}
+                                >
+                                    <TableCell>
+                                        <Avatar alt={request.name} src={request.imageUrl} />
+                                    </TableCell>
+
+                                    <TableCell
+                                        sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}
+                                    >
+                                        <Box sx={{ display: "flex", flexDirection: "column" }}>
+                                            <Typography
+                                                sx={{
+                                                    fontWeight: 500,
+                                                    fontSize: "0.875rem !important",
+                                                }}
+                                            >
+                                                {request.name}
+                                            </Typography>
+                                            <Typography variant="caption">{request.brand}</Typography>
+                                        </Box>
+                                    </TableCell>
+                                    <TableCell sx={{ textAlign: "center" }}>
+                                        {request.cuisineType}
+                                    </TableCell>
+                                    <TableCell sx={{ textAlign: "center" }}>
+                                        {request.location}
+                                    </TableCell>
+                                    <TableCell sx={{ textAlign: "center" }}>
+                                        {request.status}
+                                    </TableCell>
+
+                                    <TableCell sx={{ textAlign: "center" }}>
+                                        <Button
+                                            variant="contained"
+                                            color="success"
+                                            onClick={() => handleApproveRequest(request._id)}
+                                            sx={{ mr: 1 }}
+                                        >
+                                            Approve
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            color="error"
+                                            onClick={() => handleRejectRequest(request._id)}
+                                        >
+                                            Reject
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Card>
+
+            <Backdrop
+                sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        </Box>
     );
-  };
-  
-  export default RestaurantRequestTable;
-  
+};
+
+export default RestaurantRequestTable;
