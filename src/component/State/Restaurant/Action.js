@@ -263,7 +263,7 @@ export const createCategoryAction = ({ reqData, jwt }) => {
             const res = await api.post(`${API_URL}/api/admin/category`, reqData, {
                 headers: {
                     Authorization: `Bearer ${jwt}`,
-                },
+                }
             });
             console.log("create category ", res.data);
             dispatch({ type: CREATE_CATEGORY_SUCCESS, payload: res.data });
@@ -286,6 +286,7 @@ export const getRestaurantsCategory = ({ jwt,restaurantId }) => {
             console.log("get restaurants category ", res.data);
             dispatch({ type: GET_RESTAURANTS_CATEGORY_SUCCESS, payload: res.data });
         } catch (error) {
+            console.log("catch error ", error)
             dispatch({ type: GET_RESTAURANTS_CATEGORY_FAILURE, payload: error });
         }
     };

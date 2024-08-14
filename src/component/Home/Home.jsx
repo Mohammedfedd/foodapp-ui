@@ -11,10 +11,13 @@ const Home = () => {
     const dispatch=useDispatch()
     const jwt=localStorage.getItem("jwt")
     const {restaurant}=useSelector(store=>store)
+    const navigate=useNavigate()
     console.log("restaurant",restaurant)
     useEffect(() => {
         dispatch(getAllRestaurantsAction(jwt))
     }, []);
+
+ 
   return (
     <div className="pb-10">
       <section className="-z-50 banner relative flex flex-col justify-center items-center">
