@@ -4,7 +4,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import MenuCard from "./MenuCard";
 import {useDispatch , useSelector } from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { getRestaurantById, getRestaurantsCategory } from "../State/Restaurant/Action";
 import { getMenuItemsByRestaurantId } from "../State/Menu/Action";
 
