@@ -4,7 +4,10 @@ import {
     GET_USER_REQUEST, GET_USER_SUCCESS, LOGIN_FAILURE,
     LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, REGISTER_FAILURE,
     REGISTER_REQUEST,
-    REGISTER_SUCCESS
+    REGISTER_SUCCESS,
+    REQUEST_RESET_PASSWORD_REQUEST,
+    REQUEST_RESET_PASSWORD_SUCCESS,
+    REQUEST_RESET_PASSWORD_FAILURE,
 } from "./ActionType";
 import {isPresentInFavorites} from "../../config/logic";
 
@@ -23,6 +26,7 @@ export const authReducer=(state=initialState,action)=>{
         case LOGIN_REQUEST:
         case GET_USER_REQUEST:
         case ADD_TO_FAVORITE_REQUEST:
+        case REQUEST_RESET_PASSWORD_REQUEST:
             return {
                 ...state,
                 isLoading: true,
@@ -44,6 +48,12 @@ export const authReducer=(state=initialState,action)=>{
                 user:action.payload,
                 favorites: action.payload.favorites
             };
+        case REQUEST_RESET_PASSWORD_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                success: action.payload?.message,
+            };
         case ADD_TO_FAVORITE_SUCCESS:
             return{
                 ...state,
@@ -53,12 +63,12 @@ export const authReducer=(state=initialState,action)=>{
                             ? state.favorites.filter((item)=>item.id!==action.payload.id)
                     :[action.payload,...state.favorites]
             };
-        case LOGOUT:
-            return initialState;
+
         case REGISTER_FAILURE:
         case LOGIN_FAILURE:
         case GET_USER_FAILURE:
         case ADD_TO_FAVORITE_FAILURE:
+        case REQUEST_RESET_PASSWORD_FAILURE:
             return {
                 ...state,
                 isLoading: false,
@@ -68,8 +78,11 @@ export const authReducer=(state=initialState,action)=>{
 
 
 
-    default:
-        return state;
+        case LOGOUT:
+            localStorage.removeItem("jwt");
+            return { ...state, jwt: null, user: null, success: "logout success" };
+        default:
+            return state;
 
 }
 }

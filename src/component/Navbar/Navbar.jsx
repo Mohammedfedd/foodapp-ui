@@ -18,8 +18,8 @@ import { logout } from "../State/Authentication/Action";
 import { pink } from "@mui/material/colors";
 
 export const Navbar = () => {
-    const navigate = useNavigate();
     const location = useLocation();
+    const navigate = useNavigate();
     const { auth, cart } = useSelector((store) => store);
     const dispatch = useDispatch();
 
@@ -68,14 +68,14 @@ export const Navbar = () => {
     };
 
     return (
-        <div className="px-5 z-50 py-[.8rem] bg-[#e91e63]  lg:px-20 flex justify-between">
+        <div className='px-5 sticky top-0 z-50 py-[.8rem] bg-[#e91e63] lg:px-20 flex justify-between'>
             <div className="flex items-center space-x-4">
                 <div
                     onClick={navigateToHome}
                     className="lg:mr-10 cursor-pointer flex items-center space-x-4"
                 >
                     <li className="logo font-semibold text-gray-300 text-2xl">
-                        Zosh Food
+                        Tasty Dash
                     </li>
                 </div>
                 {/* <li className="font font-semibold">Home</li> */}
@@ -83,7 +83,7 @@ export const Navbar = () => {
             <div className="flex items-center space-x-2 lg:space-x-10">
                 <div className="">
                     <IconButton onClick={() => navigate("/search")}>
-                        <SearchIcon sx={{ fontSize: "1.5rem" }} />
+                        <SearchIcon sx={{fontSize: "1.5rem"}}/>
                     </IconButton>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -100,13 +100,13 @@ export const Navbar = () => {
                             }
                             className=" font-semibold cursor-pointer"
                         >
-              <Avatar sx={{ bgcolor: "white",color:pink.A400}} className="bg-white">
+              <Avatar sx={{bgcolor: "white", color: pink.A400}} className="bg-white">
                 {auth.user.fullName[0].toUpperCase()}
               </Avatar>
             </span>
                     ) : (
                         <IconButton onClick={() => navigate("/account/login")}>
-                            <PersonIcon sx={{ fontSize: "2rem" }} />
+                            <PersonIcon sx={{fontSize: "2rem"}}/>
                         </IconButton>
                     )}
                     <Menu
@@ -122,13 +122,11 @@ export const Navbar = () => {
                             onClick={() => {
                                 if (auth.user?.role === "ROLE_ADMIN") {
                                     navigate("/super-admin");
-                                }
-                                else if (auth.user?.role==="ROLE_RESTAURANT_OWNER")
-                                {
+                                } else if (auth.user?.role === "ROLE_RESTAURANT_OWNER") {
                                     navigate("/admin/restaurants");
+                                }
                             }
                             }
-                        }
                         >
                             Profile
                         </MenuItem>
@@ -138,12 +136,12 @@ export const Navbar = () => {
 
                 <IconButton onClick={navigateToCart}>
                     <Badge color="black" badgeContent={cart.cartItems.length}>
-                        <ShoppingCartIcon className="text-4xl" sx={{ fontSize: "2rem" }} />
+                        <ShoppingCartIcon className="text-4xl" sx={{fontSize: "2rem"}}/>
                     </Badge>
                 </IconButton>
             </div>
 
-            <Auth handleClose={handleCloseAuthModel} />
+            <Auth handleClose={handleCloseAuthModel}/>
         </div>
     );
 };

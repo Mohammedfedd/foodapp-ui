@@ -5,7 +5,7 @@ import SuperAdminCustomerTable from "./SuperAdminCustomerTable/SuperAdminCustome
 import Customers from "./SuperAdminCustomerTable/Customers";
 import RestaurantTable from "./Restaurants/RestaurantTable";
 import SuperAdminRestaurant from "./Restaurants/SuperAdminRestaurant";
-import RestaurantRequest from "./RestaurantRequest/RestaurantRequest";
+import ArchivedRestaurant from "./RestaurantRequest/ArchivedRestaurant";
 import SuperAdminDashboard from "./SuperAdminDashboard/SuperAdminDashboard";
 import {useDispatch, useSelector} from "react-redux";
 import {getCustomers} from "../component/State/SuperAdmin/Action";
@@ -41,7 +41,7 @@ import {getCustomers} from "../component/State/SuperAdmin/Action";
                         <Route path="/" element={<SuperAdminDashboard/>}></Route>
                         <Route path="/customers" element={<Customers/>}></Route>
                         <Route path="/restaurants" element={<SuperAdminRestaurant/>}></Route>
-                        <Route path="/restaurant-request" element={<RestaurantRequest/>}></Route>
+                        <Route path="/archived" element={<ArchivedRestaurant/>}></Route>
                     </Routes>
                 </div>
             </div>

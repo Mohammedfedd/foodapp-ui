@@ -1,5 +1,5 @@
 
-import { api } from "../../../config/api";
+import { api } from "../../config/api";
 
 import {
     ADD_ITEM_TO_CART_FAILURE,
@@ -27,13 +27,15 @@ export const findCart = (token) => {
     return async (dispatch) => {
         dispatch({type:FIND_CART_REQUEST});
         try {
-            const response = await api.get(`${API_URL}/api/cart/`,{
+            const response = await api.get(`${API_URL}/api/cart`,{
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            console.log("my cart",response.data)
             dispatch({type:FIND_CART_SUCCESS,payload:response.data});
         } catch (error) {
+            console.log("error",error);
             dispatch({type:FIND_CART_FAILURE,payload:error});
         }
     };

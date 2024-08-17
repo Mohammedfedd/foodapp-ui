@@ -1,5 +1,6 @@
 import {Card,Chip,IconButton} from "@mui/material";
 import React from "react";
+import './Restaurant.css';
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon  from "@mui/icons-material/FavoriteBorder";
 import {useNavigate} from "react-router-dom";
@@ -16,19 +17,20 @@ const RestaurantCard = ({item}) => {
         dispatch(addToFavourites({restaurantId:item.id,jwt}))
     }
 
-    const HandleNavigateToRestaurant=() =>{
-
-        if(item.open){
-          navigate('/restaurant/${item.address.city}/${item.name}/${item.id}')
+    const HandleNavigateToRestaurant = () => {
+        if (item.open) {
+            const city = item.address?.city || 'default-city';
+            const name = item.name || 'default-name';
+            navigate(`/restaurant/${city}/${name}/${item.id}`);
         }
-      }
+    };
 
     return(
-        <Card className="w-[18rem]">
+        <Card className="m-5 w-[18rem] productCard" >
 
-        <div className={`${true ? 'cursor-pointer' : 'cursor-not-allowed'} relative`}>
+        <div className={`${'cursor-pointer'} relative`}>
 
-            <img
+            <img onClick={HandleNavigateToRestaurant}
             className="w-full h-[10rem] rounded-t-md object-cover"
             src={item.images[1]}
              alt="" />

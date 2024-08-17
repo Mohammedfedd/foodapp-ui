@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {getRestaurants, SuperdeleteRestaurant} from "../../component/State/SuperAdmin/Action"; // Update this path to where your action is defined
+import { getAllRestaurantsAction, SuperarchiveRestaurant } from "../../component/State/SuperAdmin/Action"; // Update this path to where your action is defined
 import {
     Avatar,
     Backdrop,
@@ -17,23 +17,26 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import {findCart} from "../../component/State/Cart/Action"; // Import Archive icon
 
 const RestaurantTable = ({ isDashboard, name }) => {
     const dispatch = useDispatch();
+    const jwt=localStorage.getItem("jwt");
     const { restaurants, loading } = useSelector((store) => store.restaurant);
 
     useEffect(() => {
-        dispatch(getRestaurants()); // Fetch restaurants when the component mounts
-    }, [dispatch]);
+        dispatch(getAllRestaurantsAction(jwt));
+        dispatch(findCart(jwt));
+    }, [dispatch, jwt]);
 
-    const handleDelete = async (restaurantId) => {
-        if (window.confirm("Are you sure you want to delete this restaurant?")) {
+    const handleArchive = async (restaurantId) => {
+        if (window.confirm("Are you sure you want to archive this restaurant?")) {
             try {
-                await dispatch(SuperdeleteRestaurant(restaurantId)); // Dispatch delete action
-                alert('Restaurant deleted successfully'); // Notify user of successful deletion
+                await dispatch(SuperarchiveRestaurant(restaurantId)); // Dispatch archive action
+                alert('Restaurant archived successfully'); // Notify user of successful archiving
             } catch (error) {
-                alert('Failed to delete restaurant. Please try again.'); // Notify user of failure
+                alert('Failed to archive restaurant. Please try again.'); // Notify user of failure
             }
         }
     };
@@ -70,11 +73,11 @@ const RestaurantTable = ({ isDashboard, name }) => {
                                 .map((item) => (
                                     <TableRow
                                         hover
-                                        key={item.name}
+                                        key={item.id}
                                         sx={{ "&:last-of-type td, &:last-of-type th": { border: 0 } }}
                                     >
                                         <TableCell>
-                                            <Avatar alt={item.name} src={item.imageUrl} />
+                                            <Avatar alt={item.name} src={item.images[0]} />
                                         </TableCell>
 
                                         <TableCell
@@ -108,8 +111,8 @@ const RestaurantTable = ({ isDashboard, name }) => {
                                             </TableCell>
                                         )}
                                         <TableCell sx={{ textAlign: "center" }}>
-                                            <IconButton onClick={() => handleDelete(item.id)} color="error">
-                                                <DeleteIcon />
+                                            <IconButton onClick={() => handleArchive(item.id)} color="warning">
+                                                <ArchiveIcon />
                                             </IconButton>
                                         </TableCell>
                                     </TableRow>

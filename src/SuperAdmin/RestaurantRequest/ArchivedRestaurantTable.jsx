@@ -1,3 +1,6 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getArchivedRestaurants, unarchiveRestaurant } from "../../component/State/SuperAdmin/Action"; // Update this path to where your action is defined
 import {
     Avatar,
     Backdrop,
@@ -6,6 +9,7 @@ import {
     Card,
     CardHeader,
     CircularProgress,
+    IconButton,
     Table,
     TableBody,
     TableCell,
@@ -14,38 +18,32 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-    approveRestaurantRequest,
-    rejectRestaurantRequest,
-    getPendingRestaurants
-} from "../../component/State/SuperAdmin/Action"; // Update path to your action file
+import UnarchiveIcon from '@mui/icons-material/Unarchive'; // Import Unarchive icon
 
-const RestaurantRequestTable = ({ isDashboard, name }) => {
+const ArchivedRestaurantTable = () => {
     const dispatch = useDispatch();
-    const { requests, loading } = useSelector((store) => store.restaurantRequests);
+    const { archivedRestaurants, loading } = useSelector((store) => store.superAdmin);
 
     useEffect(() => {
-        // Fetch the restaurant requests when the component mounts
-        dispatch(getPendingRestaurants());
+        dispatch(getArchivedRestaurants()); // Fetch archived restaurants when the component mounts
     }, [dispatch]);
 
-    const handleApproveRequest = (requestId) => {
-        console.log("Approve request ", requestId);
-        dispatch(approveRestaurantRequest(requestId));
-    };
-
-    const handleRejectRequest = (requestId) => {
-        console.log("Reject request ", requestId);
-        dispatch(rejectRestaurantRequest(requestId));
+    const handleUnarchive = async (restaurantId) => {
+        if (window.confirm("Are you sure you want to unarchive this restaurant?")) {
+            try {
+                await dispatch(unarchiveRestaurant(restaurantId)); // Dispatch unarchive action
+                alert('Restaurant unarchived successfully'); // Notify user of successful unarchiving
+            } catch (error) {
+                alert('Failed to unarchive restaurant. Please try again.'); // Notify user of failure
+            }
+        }
     };
 
     return (
         <Box width={"100%"}>
             <Card className="mt-1">
                 <CardHeader
-                    title={name}
+                    title="Archived Restaurants"
                     sx={{
                         pt: 2,
                         alignItems: "center",
@@ -53,7 +51,7 @@ const RestaurantRequestTable = ({ isDashboard, name }) => {
                     }}
                 />
                 <TableContainer>
-                    <Table aria-label="restaurant requests table">
+                    <Table aria-label="archived restaurants table">
                         <TableHead>
                             <TableRow>
                                 <TableCell>Image</TableCell>
@@ -65,14 +63,14 @@ const RestaurantRequestTable = ({ isDashboard, name }) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {requests.slice(0, isDashboard ? 7 : requests.length).map((request) => (
+                            {archivedRestaurants.map((restaurant) => (
                                 <TableRow
                                     hover
-                                    key={request._id}
+                                    key={restaurant.id}
                                     sx={{ "&:last-of-type td, &:last-of-type th": { border: 0 } }}
                                 >
                                     <TableCell>
-                                        <Avatar alt={request.name} src={request.imageUrl} />
+                                        <Avatar alt={restaurant.name} src={restaurant.imageUrl} />
                                     </TableCell>
 
                                     <TableCell
@@ -85,37 +83,25 @@ const RestaurantRequestTable = ({ isDashboard, name }) => {
                                                     fontSize: "0.875rem !important",
                                                 }}
                                             >
-                                                {request.name}
+                                                {restaurant.name}
                                             </Typography>
-                                            <Typography variant="caption">{request.brand}</Typography>
+                                            <Typography variant="caption">{restaurant.brand}</Typography>
                                         </Box>
                                     </TableCell>
                                     <TableCell sx={{ textAlign: "center" }}>
-                                        {request.cuisineType}
+                                        {restaurant.cuisineType}
                                     </TableCell>
                                     <TableCell sx={{ textAlign: "center" }}>
-                                        {request.location}
+                                        {restaurant.location}
                                     </TableCell>
                                     <TableCell sx={{ textAlign: "center" }}>
-                                        {request.status}
+                                        {restaurant.status}
                                     </TableCell>
 
                                     <TableCell sx={{ textAlign: "center" }}>
-                                        <Button
-                                            variant="contained"
-                                            color="success"
-                                            onClick={() => handleApproveRequest(request._id)}
-                                            sx={{ mr: 1 }}
-                                        >
-                                            Approve
-                                        </Button>
-                                        <Button
-                                            variant="contained"
-                                            color="error"
-                                            onClick={() => handleRejectRequest(request._id)}
-                                        >
-                                            Reject
-                                        </Button>
+                                        <IconButton onClick={() => handleUnarchive(restaurant.id)} color="success">
+                                            <UnarchiveIcon />
+                                        </IconButton>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -134,4 +120,4 @@ const RestaurantRequestTable = ({ isDashboard, name }) => {
     );
 };
 
-export default RestaurantRequestTable;
+export default ArchivedRestaurantTable;

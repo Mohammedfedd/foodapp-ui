@@ -3,7 +3,7 @@ import { ProfileNavigation } from './ProfileNavigation'
 import { UserProfile} from './UserProfile'
 import {Routes ,Route  } from 'react-router-dom'
 import { Orders } from './Orders';
-import { Address } from './Address';
+import UsersAddresses   from "./UsersAddresses";
 import Favorites from './Favorites';
 import { Events } from './Events';
 const Profile = () => {
@@ -19,7 +19,7 @@ const Profile = () => {
 
         <Route path='/' element={<UserProfile/>}/>
         <Route path='/orders' element={<Orders/>}/>
-        <Route path='/address' element={<Address/>}/>
+        <Route path='/address' element={<UsersAddresses/>}/>
         <Route path='/favorites' element={<Favorites/>}> </Route>
         <Route path='/events' element={< Events/>} > </Route>
 

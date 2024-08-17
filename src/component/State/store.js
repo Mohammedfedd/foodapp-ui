@@ -15,7 +15,7 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 const persistConfig = {
     key: "root",
     storage,
-    whitelist: ["restaurant", "superAdmin"], // Add any other reducers you want to persist
+    // Add any other reducers you want to persist
 };
 
 // Combine reducers

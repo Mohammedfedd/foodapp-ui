@@ -4,6 +4,10 @@ import { CartItem } from './CartItem'
 import AddressCard from "./AddressCard";
 import AddLocationIcon from '@material-ui/icons/AddLocation';
 import {ErrorMessage, Field, Form, Formik} from "formik";
+import {useDispatch, useSelector} from "react-redux";
+import auth from "../Auth/Auth";
+import {createOrder} from "../State/Order/Action";
+import { cartTotal } from "./totalPay";
 //import * as Yup from "yup"
 
 export const style = {
@@ -19,7 +23,7 @@ export const style = {
 };
 const initialValues={
     streetAddress:"",
-    state:"",
+    stateProvince:"",
     zipcode:"",
     city:""
 
@@ -32,7 +36,6 @@ const initialValues={
 
 //})
 
-const items=[1,1]
 const Cart = () => {
     const createOrderUsingSelectedAddress=()=>{
 
@@ -40,23 +43,40 @@ const Cart = () => {
     const handleOpenAddressModel=()=> setOpen(true);{
 
     }
+    const {cart}=useSelector(store=>store)
     const [open, setOpen] = React.useState(false);
     const handleClose = () => setOpen(false);
+    const dispatch=useDispatch();
     const handleSubmit=(values)=>{
+        const data={
+            jwt:localStorage.getItem("jwt"),
+            order:{
+                restaurantId:cart.cartItems[0].food?.restaurant.id,
+                deliveryAddress:{
+                    fullName: auth.user?.fullName,
+                    streetAddress:values.streetAddress,
+                    city:values.city,
+                    stateProvince:values.stateProvince,
+                    postalCode:values.zipcode,
+
+                }
+            }
+        }
+        dispatch(createOrder(data))
         console.log("form value",values)
     }
   return (
       <>
         <main className='lg:flex justify-between'>
           <section className='lg:w-[30%] space-y-6 lg:min-h-screen pt-10'>
-              {items.map((item)=> (<CartItem/>))}
+              {cart.cartItems.map((item)=> (<CartItem item={item}/>))}
               <Divider/>
               <div className="billDetails px-5 text-sm">
                   <p className="font-extralight py-5">Bill Details</p>
                   <div className="space-y-3">
                       <div className=" flex justify-between text-gray-400">
                           <p>Item Total</p>
-                          <p>200 DH</p>
+                          <p>{cartTotal(cart.cartItems)} DH</p>
 
                       </div>
                       <div className=" flex justify-between text-gray-400">
@@ -66,7 +86,7 @@ const Cart = () => {
                       </div>
                       <div className=" flex justify-between text-gray-400">
                           <p>TVA</p>
-                          <p>24.83</p>
+                          <p>25 DH</p>
 
                       </div>
                       <Divider/>
@@ -74,7 +94,7 @@ const Cart = () => {
                   </div>
                   <div className="flex justify-between text-gray-400">
                       <p>Total Price</p>
-                      <p>234.83 DH</p>
+                      <p>{cartTotal(cart.cartItems)+10+25}</p>
 
                   </div>
 
@@ -85,7 +105,12 @@ const Cart = () => {
                 <div>
                     <h1 className="text-center font-semibold text-2xl py-10">Choose Delivery Address</h1>
                     <div className="flex gap-5 flex-wrap justify-center">
-                        {[1,1,1,1,1].map((item)=>(<AddressCard handleSelectAddress={createOrderUsingSelectedAddress} item={item} showButton={true}/> ))}
+                        {auth.user?.addresses.map((item, index) => (
+                            <AddressCard
+                                handleSelectAddress={createOrderUsingSelectedAddress}
+                                item={item}
+                                showButton={true}
+                            /> ))}
                         <Card className="flex gap-8 w-80 p-7">
                             <AddLocationIcon/>
                             <div className="space-y-3 text-gray-500">
@@ -142,7 +167,7 @@ const Cart = () => {
                                <Grid item xs={12}>
                                    <Field
                                        as={TextField}
-                                       name="state"
+                                       name="stateProvince"
                                        label="State"
                                        fullWidth
                                        variant="outlined"

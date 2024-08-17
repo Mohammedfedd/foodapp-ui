@@ -9,23 +9,25 @@ import {
     GET_RESTAURANTS_FAILURE,
     GET_RESTAURANTS_REQUEST,
     GET_RESTAURANTS_SUCCESS,
-    GET_PENDING_RESTAURANTS_FAILURE,
-    GET_PENDING_RESTAURANTS_REQUEST,
-    GET_PENDING_RESTAURANTS_SUCCESS,
     DELETE_CUSTOMER_FAILURE,
     DELETE_CUSTOMER_SUCCESS,
     DELETE_CUSTOMER_REQUEST,
-    DELETE_RESTAURANT_FAILURE,
-    DELETE_RESTAURANT_SUCCESS,
-    DELETE_RESTAURANT_REQUEST,
-    APPROVE_RESTAURANT_REQUEST_REQUEST,
-    APPROVE_RESTAURANT_REQUEST_SUCCESS,
-    REJECT_RESTAURANT_REQUEST_SUCCESS,
-    APPROVE_RESTAURANT_REQUEST_FAILURE,
-    REJECT_RESTAURANT_REQUEST_REQUEST,
-    REJECT_RESTAURANT_REQUEST_FAILURE
+    ARCHIVE_RESTAURANT_REQUEST,
+    ARCHIVE_RESTAURANT_SUCCESS,
+    ARCHIVE_RESTAURANT_FAILURE,
+    GET_ARCHIVED_RESTAURANTS_REQUEST,
+    GET_ARCHIVED_RESTAURANTS_SUCCESS,
+    GET_ARCHIVED_RESTAURANTS_FAILURE,
+    UNARCHIVE_RESTAURANT_FAILURE,
+    UNARCHIVE_RESTAURANT_SUCCESS,
+    UNARCHIVE_RESTAURANT_REQUEST
 } from "./ActionType";
 import axios from "axios";
+import {
+    GET_ALL_RESTAURANTS_FAILURE,
+    GET_ALL_RESTAURANTS_REQUEST,
+    GET_ALL_RESTAURANTS_SUCCESS
+} from "../Restaurant/ActionType";
 
 // Fetch all customers
 export const getCustomers = () => {
@@ -38,7 +40,7 @@ export const getCustomers = () => {
                     Authorization: `Bearer ${token}`, // Set the Authorization header with the JWT token
                 },
             };
-            const { data } = await api.get(`${API_URL}/api/customers`, config);
+            const { data } = await axios.get(`${API_URL}/api/customers`, config);
             dispatch({ type: GET_CUSTOMERS_SUCCESS, payload: data });
             console.log("Fetched customers: ", data);
         } catch (error) {
@@ -92,100 +94,89 @@ export const getPendingCustomers = () => {
 };
 
 // Fetch all restaurants
-export const getRestaurants = () => async (dispatch) => {
-    dispatch({ type: GET_RESTAURANTS_REQUEST });
+export const getAllRestaurantsAction = (jwt) => async (dispatch) => {
+    return async (dispatch) => {
+        dispatch({ type: GET_ALL_RESTAURANTS_REQUEST });
+        try {
+            const token = localStorage.getItem('jwt'); // Get the JWT token from localStorage
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Set the Authorization header with the JWT token
+                },
+            };
+            const { data } = await axios.get(`${API_URL}/api/restaurants`, config);
+            dispatch({ type: GET_ALL_RESTAURANTS_SUCCESS, payload: data });
+            console.log("Fetched customers: ", data);
+        } catch (error) {
+            dispatch({
+                type: GET_ALL_RESTAURANTS_FAILURE,
+                payload: error.message // Include the error message in the payload
+            });
+            console.error("Error fetching restaurants: ", error); // Improved error logging
+        }
+    };
+};
 
-    const jwtToken = localStorage.getItem("jwt");
+
+
+// Fetch archived restaurants
+export const getArchivedRestaurants = () => async (dispatch) => {
+    dispatch({ type:GET_ARCHIVED_RESTAURANTS_REQUEST });
 
     try {
-        const response = await axios.get(`${API_URL}/api/restaurants`, {
-            headers: {
-                Authorization: `Bearer ${jwtToken}`, // Include JWT token in headers
-            },
-        });
+        const response = await fetch(`${API_URL}/api/restaurants/archived`);
+        const data = await response.json();
 
-        dispatch({
-            type: GET_RESTAURANTS_SUCCESS,
-            payload: response.data,
-        });
+        if (response.ok) {
+            dispatch({
+                type: GET_ARCHIVED_RESTAURANTS_SUCCESS,
+                payload: data,
+            });
+        } else {
+            dispatch({
+                type:GET_ARCHIVED_RESTAURANTS_FAILURE,
+                payload: data.message,
+            });
+        }
     } catch (error) {
         dispatch({
-            type: GET_RESTAURANTS_FAILURE,
+            type: GET_ARCHIVED_RESTAURANTS_FAILURE,
+            payload: error.message,
+        });
+    }
+};
+export const unarchiveRestaurant = (restaurantId) => async (dispatch) => {
+    dispatch({ type: UNARCHIVE_RESTAURANT_REQUEST });
+
+    try {
+        const response = await fetch(`${API_URL}/api/restaurants/${restaurantId}/unarchive`, {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            dispatch({
+                type:UNARCHIVE_RESTAURANT_SUCCESS,
+                payload: restaurantId,
+            });
+        } else {
+            const errorData = await response.json();
+            dispatch({
+                type:UNARCHIVE_RESTAURANT_FAILURE,
+                payload: errorData.message,
+            });
+        }
+    } catch (error) {
+        dispatch({
+            type:UNARCHIVE_RESTAURANT_FAILURE,
             payload: error.message,
         });
     }
 };
 
-// Fetch pending restaurants
-export const getPendingRestaurants = () => {
-        return async (dispatch) => {
-            dispatch({type: GET_PENDING_RESTAURANTS_REQUEST});
-            try {
-                const token = localStorage.getItem('jwt');
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                };
-                const response = await axios.get(`${API_URL}/api/restaurant/pending`, config);
-                dispatch({type: GET_PENDING_RESTAURANTS_SUCCESS, payload: response.data});
-            } catch (error) {
-                dispatch({
-                    type: GET_PENDING_RESTAURANTS_FAILURE,
-                    payload: error.message,
-                });
-            }
-        };
-};
-export const approveRestaurantRequest = (requestId) => {
-    return async (dispatch) => {
-        dispatch({ type: APPROVE_RESTAURANT_REQUEST_REQUEST });
-        try {
-            const token = localStorage.getItem('jwt');
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-            await axios.post(`${API_URL}/api/restaurant/approve/${requestId}`, {}, config);
-            dispatch({ type: APPROVE_RESTAURANT_REQUEST_SUCCESS, payload: requestId });
-            dispatch(getRestaurants()); // Refresh the list of pending requests
-        } catch (error) {
-            dispatch({
-                type: APPROVE_RESTAURANT_REQUEST_FAILURE,
-                payload: error.message,
-            });
-        }
-    };
-};
-
-// Reject restaurant request
-export const rejectRestaurantRequest = (requestId) => {
-    return async (dispatch) => {
-        dispatch({ type: REJECT_RESTAURANT_REQUEST_REQUEST });
-        try {
-            const token = localStorage.getItem('jwt');
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-            await axios.post(`${API_URL}/api/restaurant/reject/${requestId}`, {}, config);
-            dispatch({ type: REJECT_RESTAURANT_REQUEST_SUCCESS, payload: requestId });
-            dispatch(getRestaurants()); // Refresh the list of pending requests
-        } catch (error) {
-            dispatch({
-                type: REJECT_RESTAURANT_REQUEST_FAILURE,
-                payload: error.message,
-            });
-        }
-    };
-};
-
 // Delete restaurant
-export const SuperdeleteRestaurant = (restaurantId) => {
+export const SuperarchiveRestaurant = (restaurantId) => {
     return async (dispatch) => {
-        dispatch({ type: DELETE_RESTAURANT_REQUEST });
+        dispatch({ type: ARCHIVE_RESTAURANT_REQUEST });
         try {
             const token = localStorage.getItem('jwt');
             const config = {
@@ -193,16 +184,17 @@ export const SuperdeleteRestaurant = (restaurantId) => {
                     Authorization: `Bearer ${token}`,
                 },
             };
-            console.log(`Deleting restaurant with ID: ${restaurantId}`);
-            console.log(`Request URL: ${API_URL}/api/restaurants/${restaurantId}`);
-            await api.delete(`${API_URL}/api/restaurants/${restaurantId}`, config);
-            dispatch({ type: DELETE_RESTAURANT_SUCCESS, payload: restaurantId });
+            console.log(`Archiving restaurant with ID: ${restaurantId}`);
+            console.log(`Request URL: ${API_URL}/api/restaurants/${restaurantId}/archive`);
+            await api.post(`${API_URL}/api/restaurants/${restaurantId}/archive`, {}, config); // POST request to archive
+            dispatch({ type: ARCHIVE_RESTAURANT_SUCCESS, payload: restaurantId });
         } catch (error) {
-            console.error(`Error deleting restaurant with id ${restaurantId}: `, error);
+            console.error(`Error archiving restaurant with id ${restaurantId}: `, error);
             dispatch({
-                type: DELETE_RESTAURANT_FAILURE,
+                type: ARCHIVE_RESTAURANT_FAILURE,
                 payload: error.message,
             });
         }
     };
 };
+

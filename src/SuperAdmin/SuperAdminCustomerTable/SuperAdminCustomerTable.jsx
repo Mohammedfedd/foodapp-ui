@@ -1,3 +1,6 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getCustomers, deleteCustomer } from "../../component/State/SuperAdmin/Action";
 import {
     Avatar,
     Backdrop,
@@ -5,7 +8,7 @@ import {
     Button,
     Card,
     CardHeader,
-    CircularProgress,
+    CircularProgress, IconButton,
     Table,
     TableBody,
     TableCell,
@@ -14,13 +17,11 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getCustomers, deleteCustomer } from "../../component/State/SuperAdmin/Action"; // Ensure correct path
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const SuperAdminCustomerTable = ({ isDashboard, name }) => {
     const dispatch = useDispatch();
-    const { customers, loading } = useSelector((store) => store.superAdmin); // Update to correct state path
+    const { customers, loading } = useSelector((store) => store.superAdmin);
 
     useEffect(() => {
         dispatch(getCustomers()); // Fetch customers when the component mounts
@@ -37,6 +38,9 @@ const SuperAdminCustomerTable = ({ isDashboard, name }) => {
         }
     };
 
+    // Filter out users with the "ROLE_ADMIN" role
+    const filteredCustomers = customers.filter(customer => customer.role !== "ROLE_ADMIN");
+
     return (
         <Box width={"100%"}>
             <Card className="mt-1">
@@ -49,24 +53,24 @@ const SuperAdminCustomerTable = ({ isDashboard, name }) => {
                     }}
                 />
                 <TableContainer>
-                    <Table aria-label="table in dashboard">
+                    <Table aria-label="customer table">
                         <TableHead>
                             <TableRow>
                                 <TableCell>Image</TableCell>
                                 <TableCell>Full Name</TableCell>
-                                <TableCell>User Id</TableCell>
+                                <TableCell>User ID</TableCell>
                                 <TableCell>Email</TableCell>
                                 <TableCell>User Role</TableCell>
-                                <TableCell>Actions</TableCell> {/* Added Actions column */}
+                                <TableCell>Actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {customers
-                                .slice(0, isDashboard ? 7 : customers.length)
+                            {filteredCustomers
+                                .slice(0, isDashboard ? 7 : filteredCustomers.length)
                                 .map((item) => (
                                     <TableRow
                                         hover
-                                        key={item.id} // Use item.id for the key
+                                        key={item.id}
                                         sx={{ "&:last-of-type td, &:last-of-type th": { border: 0 } }}
                                     >
                                         <TableCell>
@@ -93,13 +97,12 @@ const SuperAdminCustomerTable = ({ isDashboard, name }) => {
                                         <TableCell>{item.role}</TableCell>
 
                                         <TableCell>
-                                            <Button
-                                                color="error"
-                                                variant="contained"
+                                            <IconButton
                                                 onClick={() => handleDeleteCustomer(item.id)}
+                                                color="error"
                                             >
-                                                Delete
-                                            </Button>
+                                                <DeleteIcon />
+                                            </IconButton>
                                         </TableCell>
                                     </TableRow>
                                 ))}

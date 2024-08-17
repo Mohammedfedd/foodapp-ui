@@ -15,7 +15,7 @@ import {useDispatch} from "react-redux";
 import {logout} from "../State/Authentication/Action";
 
 
-const menu=[ 
+const menu=[
     {title:"Orders",icon:<ShoppingBagIcon/>},
     {title:"Favorites",icon:<FavoriteIcon/>},
     {title:"Address",icon:<AddReactionIcon/>},
@@ -36,37 +36,38 @@ export const ProfileNavigation = ({open,handleClose}) => {
         else
         navigate(`/my-profile/${item.title.toLowerCase()}`);
 
-      
+
 
     }
 
     return (
         <React.Fragment>
-
-             <Drawer
-             variant={isSmallScreen ? "temporary" : "permanent"}
-             onClose={handleClose}
-             open={isSmallScreen ? open : true}
-             anchor={"left"}
-             sx={{zIndex: 1 , position:"sticky"}}
-             >
-             <div className="w-[50vw] lg:w-[20vw] h-[100vh] flex flex-col
-              justify-center text-xl pt-11 gap-11">
-{menu.map((item,i)=>(
-    <>
-
-<div onClick={()=>handleNavigate(item)} className='px-5 flex items-center space-x-5 cursor-pointer'>
-    {item.icon}
-    <span> {item.title}</span>
-</div>
- {i!==menu.length-1 && <Divider/>}
-</>
-))}
-             </div>
-             </Drawer>
-        </React.Fragment>
-
-
+            <Drawer
+                sx={{ zIndex: 1,position:"sticky" }}
+                anchor={"left"}
+                open={isSmallScreen ? open :true}
+                onClose={handleClose}
+                variant={isSmallScreen ? "temporary" : "permanent"}
+                // variant="persistent"
+            >
+                <div className="w-[50vw] lg:w-[20vw] h-[100vh] flex flex-col
+              justify-center text-xl pt-16 gap-14">
+                    {menu.map((item, i) => (
+                        <>
+                            <div
+                                onClick={() => handleNavigate(item)}
+                                className="px-5 flex items-center space-x-5 cursor-pointer"
+                            >
+                                {item.icon}
+                                <span>{item.title}</span>
+                            </div>
+                            {i !== menu.length - 1 && <Divider/>}
+                        </>
+                    ))}
+                </div>
+            </Drawer>
+        <
+        /React.Fragment>
     );
 };
 

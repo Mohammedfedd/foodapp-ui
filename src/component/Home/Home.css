@@ -1,6 +1,6 @@
 .banner{
     background-image: url("https://cdn.pixabay.com/photo/2024/05/18/10/13/cheese-burger-8770017_1280.png");
-    background-size: cover; 
+    background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
     height: 90vh;
@@ -43,14 +43,14 @@
     }
     .cover{
       height: 40vh;
-    
+
   }
-  
+
 .fadout {
-  
+
    bottom: -3rem;
    height: 20vw;
-   
+
  }
   }
-  
+
