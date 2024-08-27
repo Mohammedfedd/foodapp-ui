@@ -5,6 +5,7 @@ const initialState = {
     restaurants: [],
     usersRestaurant: null,
     restaurant: null,
+    archivedRestaurants: [], // Added state for archived restaurants
     loading: false,
     error: null,
     events: [],
@@ -21,6 +22,7 @@ const restaurantReducer = (state = initialState, action) => {
         case actionTypes.GET_RESTAURANT_BY_ID_REQUEST:
         case actionTypes.CREATE_CATEGORY_REQUEST:
         case actionTypes.GET_RESTAURANTS_CATEGORY_REQUEST:
+        case actionTypes.GET_ARCHIVED_RESTAURANTS_REQUEST: // Added request action for archived restaurants
             return {
                 ...state,
                 loading: true,
@@ -30,7 +32,7 @@ const restaurantReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                usersRestaurant:action.payload
+                usersRestaurant: action.payload,
             };
         case actionTypes.GET_ALL_RESTAURANTS_SUCCESS:
             return {
@@ -52,7 +54,6 @@ const restaurantReducer = (state = initialState, action) => {
                 loading: false,
                 usersRestaurant: action.payload,
             };
-
         case actionTypes.DELETE_RESTAURANT_SUCCESS:
             return {
                 ...state,
@@ -65,7 +66,12 @@ const restaurantReducer = (state = initialState, action) => {
                     (item) => item.id !== action.payload
                 ),
             };
-
+        case actionTypes.GET_ARCHIVED_RESTAURANTS_SUCCESS: // Handle success for fetching archived restaurants
+            return {
+                ...state,
+                loading: false,
+                archivedRestaurants: action.payload,
+            };
         case actionTypes.CREATE_EVENTS_SUCCESS:
             return {
                 ...state,
@@ -114,6 +120,7 @@ const restaurantReducer = (state = initialState, action) => {
         case actionTypes.CREATE_EVENTS_FAILURE:
         case actionTypes.CREATE_CATEGORY_FAILURE:
         case actionTypes.GET_RESTAURANTS_CATEGORY_FAILURE:
+        case actionTypes.GET_ARCHIVED_RESTAURANTS_FAILURE: // Added failure action for archived restaurants
             return {
                 ...state,
                 loading: false,

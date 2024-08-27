@@ -18,12 +18,11 @@ const superAdminReducer = (state = initialState, action) => {
         case actionTypes.GET_RESTAURANTS_REQUEST:
         case actionTypes.GET_PENDING_RESTAURANTS_REQUEST:
         case actionTypes.ARCHIVE_RESTAURANT_REQUEST:
-        case actionTypes.GET_ARCHIVED_RESTAURANTS_REQUEST:
         case actionTypes.UNARCHIVE_RESTAURANT_REQUEST:
-        case actionTypes.DELETE_CUSTOMER_REQUEST: // Added delete request action
+        case actionTypes.DELETE_CUSTOMER_REQUEST:
             return {
                 ...state,
-                loading: true,
+                loading: true,  // Setting loading to true when a request is made
                 error: null,
             };
 
@@ -52,12 +51,6 @@ const superAdminReducer = (state = initialState, action) => {
                 loading: false,
                 pendingRestaurants: action.payload,
             };
-        case actionTypes.GET_ARCHIVED_RESTAURANTS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                archivedRestaurants: action.payload,
-            };
         case actionTypes.ARCHIVE_RESTAURANT_SUCCESS:
             return {
                 ...state,
@@ -66,15 +59,15 @@ const superAdminReducer = (state = initialState, action) => {
                 restaurants: state.restaurants.filter(restaurant => restaurant.id !== action.payload),
             };
         case actionTypes.UNARCHIVE_RESTAURANT_SUCCESS:
+            // Find the restaurant in the archived list
+            const restaurantToUnarchive = state.archivedRestaurants.find(restaurant => restaurant.id === action.payload);
+
             return {
                 ...state,
                 loading: false,
-                // Remove the restaurant from archived list and add it back to the main list
+                // Remove the restaurant from the archived list and add it back to the main list
                 archivedRestaurants: state.archivedRestaurants.filter(restaurant => restaurant.id !== action.payload),
-                restaurants: [
-                    ...state.restaurants,
-                    state.archivedRestaurants.find(restaurant => restaurant.id === action.payload)
-                ]
+                restaurants: restaurantToUnarchive ? [...state.restaurants, restaurantToUnarchive] : state.restaurants,
             };
         case actionTypes.DELETE_CUSTOMER_SUCCESS:
             return {
@@ -89,12 +82,11 @@ const superAdminReducer = (state = initialState, action) => {
         case actionTypes.GET_RESTAURANTS_FAILURE:
         case actionTypes.GET_PENDING_RESTAURANTS_FAILURE:
         case actionTypes.ARCHIVE_RESTAURANT_FAILURE:
-        case actionTypes.GET_ARCHIVED_RESTAURANTS_FAILURE:
         case actionTypes.UNARCHIVE_RESTAURANT_FAILURE:
-        case actionTypes.DELETE_CUSTOMER_FAILURE: // Added delete failure action
+        case actionTypes.DELETE_CUSTOMER_FAILURE:
             return {
                 ...state,
-                loading: false,
+                loading: false, // Set loading to false on failure
                 error: action.payload,
             };
 

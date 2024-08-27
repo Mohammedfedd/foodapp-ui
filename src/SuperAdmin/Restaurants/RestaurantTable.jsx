@@ -1,6 +1,10 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllRestaurantsAction, SuperarchiveRestaurant } from "../../component/State/SuperAdmin/Action"; // Update this path to where your action is defined
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    getAllRestaurantsAction,
+    SuperarchiveRestaurant,
+    unarchiveRestaurant,
+} from '../../component/State/SuperAdmin/Action'; // Import both archive and unarchive actions
 import {
     Avatar,
     Backdrop,
@@ -16,27 +20,46 @@ import {
     TableHead,
     TableRow,
     Typography,
-} from "@mui/material";
+} from '@mui/material';
 import ArchiveIcon from '@mui/icons-material/Archive';
-import {findCart} from "../../component/State/Cart/Action"; // Import Archive icon
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
 
-const RestaurantTable = ({ isDashboard, name }) => {
+const RestaurantTable = ({ filter, name }) => {
     const dispatch = useDispatch();
-    const jwt=localStorage.getItem("jwt");
+    const jwt = localStorage.getItem('jwt');
     const { restaurants, loading } = useSelector((store) => store.restaurant);
 
     useEffect(() => {
         dispatch(getAllRestaurantsAction(jwt));
-        dispatch(findCart(jwt));
     }, [dispatch, jwt]);
 
-    const handleArchive = async (restaurantId) => {
-        if (window.confirm("Are you sure you want to archive this restaurant?")) {
-            try {
-                await dispatch(SuperarchiveRestaurant(restaurantId)); // Dispatch archive action
-                alert('Restaurant archived successfully'); // Notify user of successful archiving
-            } catch (error) {
-                alert('Failed to archive restaurant. Please try again.'); // Notify user of failure
+    const filteredRestaurants = restaurants.filter(restaurant => {
+        if (filter === 'ALL') return true;
+        if (filter === 'ACTIVE') return restaurant.status !== 'ARCHIVED';
+        if (filter === 'ARCHIVED') return restaurant.status === 'ARCHIVED';
+        return false;
+    });
+
+    const handleArchiveToggle = async (restaurantId, isArchived) => {
+        if (isArchived) {
+            if (window.confirm("Are you sure you want to unarchive this restaurant?")) {
+                try {
+                    await dispatch(unarchiveRestaurant(restaurantId));
+                    alert('Restaurant unarchived successfully');
+                    dispatch(getAllRestaurantsAction(jwt));
+                } catch (error) {
+                    alert('Failed to unarchive restaurant. Please try again.');
+                }
+            }
+        } else {
+            if (window.confirm("Are you sure you want to archive this restaurant?")) {
+                try {
+                    await dispatch(SuperarchiveRestaurant(restaurantId));
+                    alert('Restaurant archived successfully');
+                    dispatch(getAllRestaurantsAction(jwt));
+                } catch (error) {
+                    alert('Failed to archive restaurant. Please try again.');
+                }
             }
         }
     };
@@ -61,62 +84,55 @@ const RestaurantTable = ({ isDashboard, name }) => {
                                 <TableCell sx={{ textAlign: "center" }}>Owner</TableCell>
                                 <TableCell sx={{ textAlign: "center" }}>Cuisine Type</TableCell>
                                 <TableCell sx={{ textAlign: "center" }}>Location</TableCell>
-                                {!isDashboard && (
-                                    <TableCell sx={{ textAlign: "center" }}>Contact</TableCell>
-                                )}
                                 <TableCell sx={{ textAlign: "center" }}>Actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {restaurants
-                                .slice(0, isDashboard ? 7 : restaurants.length)
-                                .map((item) => (
-                                    <TableRow
-                                        hover
-                                        key={item.id}
-                                        sx={{ "&:last-of-type td, &:last-of-type th": { border: 0 } }}
+                            {filteredRestaurants.map((item) => (
+                                <TableRow
+                                    hover
+                                    key={item.id}
+                                    sx={{ "&:last-of-type td, &:last-of-type th": { border: 0 } }}
+                                >
+                                    <TableCell>
+                                        <Avatar alt={item.name} src={item.images[0]} />
+                                    </TableCell>
+
+                                    <TableCell
+                                        sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}
                                     >
-                                        <TableCell>
-                                            <Avatar alt={item.name} src={item.images[0]} />
-                                        </TableCell>
+                                        <Box sx={{ display: "flex", flexDirection: "column" }}>
+                                            <Typography
+                                                sx={{
+                                                    fontWeight: 500,
+                                                    fontSize: "0.875rem !important",
+                                                }}
+                                            >
+                                                {item.name}
+                                            </Typography>
+                                            <Typography variant="caption">{item.brand}</Typography>
+                                        </Box>
+                                    </TableCell>
+                                    <TableCell sx={{ textAlign: "center" }}>
+                                        {item.owner.fullName}
+                                    </TableCell>
+                                    <TableCell sx={{ textAlign: "center" }}>
+                                        {item.cuisineType}
+                                    </TableCell>
+                                    <TableCell sx={{ textAlign: "center" }}>
+                                        {item.address.city}
+                                    </TableCell>
 
-                                        <TableCell
-                                            sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}
+                                    <TableCell sx={{ textAlign: "center" }}>
+                                        <IconButton
+                                            onClick={() => handleArchiveToggle(item.id, item.status === 'ARCHIVED')}
+                                            color={item.status === 'ARCHIVED' ? "warning" : "primary"}
                                         >
-                                            <Box sx={{ display: "flex", flexDirection: "column" }}>
-                                                <Typography
-                                                    sx={{
-                                                        fontWeight: 500,
-                                                        fontSize: "0.875rem !important",
-                                                    }}
-                                                >
-                                                    {item.name}
-                                                </Typography>
-                                                <Typography variant="caption">{item.brand}</Typography>
-                                            </Box>
-                                        </TableCell>
-                                        <TableCell sx={{ textAlign: "center" }}>
-                                            {item.owner.fullName}
-                                        </TableCell>
-                                        <TableCell sx={{ textAlign: "center" }}>
-                                            {item.cuisineType}
-                                        </TableCell>
-                                        <TableCell sx={{ textAlign: "center" }}>
-                                            {item.address.city}
-                                        </TableCell>
-
-                                        {!isDashboard && (
-                                            <TableCell sx={{ textAlign: "center" }}>
-                                                {item.contactInformation.email}
-                                            </TableCell>
-                                        )}
-                                        <TableCell sx={{ textAlign: "center" }}>
-                                            <IconButton onClick={() => handleArchive(item.id)} color="warning">
-                                                <ArchiveIcon />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                            {item.status === 'ARCHIVED' ? <UnarchiveIcon /> : <ArchiveIcon />}
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
                 </TableContainer>

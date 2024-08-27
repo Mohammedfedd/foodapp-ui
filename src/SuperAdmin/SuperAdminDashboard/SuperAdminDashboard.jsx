@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getCustomers } from "../../component/State/SuperAdmin/Action";
+import { getCustomers, getAllRestaurantsAction } from "../../component/State/SuperAdmin/Action";
 import { Grid } from "@mui/material";
 import SuperAdminCustomerTable from "../SuperAdminCustomerTable/SuperAdminCustomerTable";
 import RestaurantTable from "../Restaurants/RestaurantTable";
@@ -9,14 +9,21 @@ import RestaurantTable from "../Restaurants/RestaurantTable";
 const SuperAdminDashboard = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
-    const { auth, customers,restaurants, loading } = useSelector(store => store);
+    const { customers, restaurants, loading } = useSelector(store => store);
 
+    // Fetch customers when `id` changes
     useEffect(() => {
         if (id) {
             dispatch(getCustomers({ customerId: id, jwt: localStorage.getItem("jwt") }));
         }
     }, [id, dispatch]);
 
+    // Fetch all restaurants once on component mount
+    useEffect(() => {
+        dispatch(getAllRestaurantsAction(localStorage.getItem("jwt")));
+    }, [dispatch]);
+
+    // Show loading indicator if any data is being fetched
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -28,17 +35,17 @@ const SuperAdminDashboard = () => {
                     <SuperAdminCustomerTable
                         name={"Recent users"}
                         isDashboard={true}
-                        customers={customers}
+                        filterRole="ALL"
                     />
                 </Grid>
                 <Grid container spacing={1}>
-                <Grid item lg={20} xs={12}>
-                    <RestaurantTable
-                        name={"Recent Restaurants"}
-                        restaurants={restaurants}
-                    />
+                    <Grid item lg={20} xs={12}>
+                        <RestaurantTable
+                            name={"Recent Restaurants"}
+                            filter="ALL" // Set the filter to show all restaurants
+                        />
+                    </Grid>
                 </Grid>
-            </Grid>
             </Grid>
         </div>
     );

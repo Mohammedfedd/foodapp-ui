@@ -8,7 +8,8 @@ import {
     Button,
     Card,
     CardHeader,
-    CircularProgress, IconButton,
+    CircularProgress,
+    IconButton,
     Table,
     TableBody,
     TableCell,
@@ -19,27 +20,31 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const SuperAdminCustomerTable = ({ isDashboard, name }) => {
+const SuperAdminCustomerTable = ({ isDashboard, name, filterRole }) => {
     const dispatch = useDispatch();
     const { customers, loading } = useSelector((store) => store.superAdmin);
 
     useEffect(() => {
-        dispatch(getCustomers()); // Fetch customers when the component mounts
+        dispatch(getCustomers());
     }, [dispatch]);
 
     const handleDeleteCustomer = async (customerId) => {
         if (window.confirm("Are you sure you want to delete this customer?")) {
             try {
-                await dispatch(deleteCustomer(customerId)); // Dispatch delete action
-                alert('Customer deleted successfully'); // Notify user of successful deletion
+                await dispatch(deleteCustomer(customerId));
+                alert('Customer deleted successfully');
             } catch (error) {
-                alert('Failed to delete customer. Please try again.'); // Notify user of failure
+                alert('Failed to delete customer. Please try again.');
             }
         }
     };
 
-    // Filter out users with the "ROLE_ADMIN" role
-    const filteredCustomers = customers.filter(customer => customer.role !== "ROLE_ADMIN");
+    const filteredCustomers = customers.filter(customer => {
+        if (filterRole === 'ALL') return true;
+        return customer.role === filterRole;
+    });
+
+    const nonAdminCustomers = filteredCustomers.filter(customer => customer.role !== "ROLE_ADMIN");
 
     return (
         <Box width={"100%"}>
@@ -65,8 +70,8 @@ const SuperAdminCustomerTable = ({ isDashboard, name }) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filteredCustomers
-                                .slice(0, isDashboard ? 7 : filteredCustomers.length)
+                            {nonAdminCustomers
+                                .slice(0, isDashboard ? 7 : nonAdminCustomers.length)
                                 .map((item) => (
                                     <TableRow
                                         hover
