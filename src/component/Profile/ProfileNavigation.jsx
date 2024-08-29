@@ -19,7 +19,6 @@ const menu=[
     {title:"Orders",icon:<ShoppingBagIcon/>},
     {title:"Favorites",icon:<FavoriteIcon/>},
     {title:"Address",icon:<AddReactionIcon/>},
-    {title:"Payments",icon:<AccountBalanceWallet/>},
     {title:"Events",icon:<EventIcon/>},
     {title:"Logout",icon:<LogoutIcon/>},
 ]
