@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import { uploadToCloudinary } from "../utils/uploadToCloudinary";
 import { createMenuItem } from "../../State/Menu/Action";
+import { getIngredientsOfRestaurant } from "../../State/Ingredients/Action";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -68,6 +69,9 @@ const initialValues = {
 };
 
 const CreateMenuForm = () => {
+  
+ 
+   
     const dispatch = useDispatch();
     const { id } = useParams();
     const { restaurant, ingredients, auth ,menu} = useSelector((store) => store);
@@ -107,7 +111,12 @@ const CreateMenuForm = () => {
     const handleCloseSnackBar = () => {
         setOpenSnackBar(false);
     };
-
+    useEffect(()=>{
+        dispatch( 
+            getIngredientsOfRestaurant(
+                {  jwt,
+                id:restaurant.userRestaurant.id} ));
+    },[]  );
     return (
         <>
             <div className="lg:px-32 px-5 lg:flex  justify-center min-h-screen items-center pb-5">

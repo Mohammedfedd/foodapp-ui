@@ -1,6 +1,7 @@
 // Actions.js
 
-import {api, API_URL} from "../../config/api";
+//import {api, API_URL} from "../../config/api";
+import { api } from "../../config/api";
 import {
     CREATE_CATEGORY_FAILURE,
     CREATE_CATEGORY_REQUEST,
@@ -36,7 +37,7 @@ import {
     CREATE_RESTAURANT_SUCCESS,
     CREATE_RESTAURANT_FAILURE,
     DELETE_RESTAURANT_REQUEST, DELETE_RESTAURANT_SUCCESS, DELETE_RESTAURANT_FAILURE,
-} from "./ActionType";
+} from "./ActionTypes";
 
 export const getAllRestaurantsAction = (token) => {
     return async (dispatch) => {
