@@ -1,0 +1,40 @@
+export const topMeels=[
+    {
+        image:"https://cdn.pixabay.com/photo/2017/12/09/08/18/pizza-3007395_1280.jpg",
+        title:"Pizza"
+    },
+    {
+        image:"https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238246_1280.jpg",
+        title:"Burger"
+    },
+    {
+        image:"https://img.freepik.com/free-photo/grilled-sandwich-with-bacon-fried-egg-tomato-lettuce-served-wooden-cutting-board_1150-42571.jpg",
+        title:"Sandwich"
+    }
+    ,
+    {
+        image:"https://transform-cf1.nws.ai/https%3A//cdn.thenewsroom.io/platform/story_media/1288825985/intro-1704475608remini-enhanced.jpg/w_1200,c_limit/",
+        title:"Tacos"
+    }
+    ,
+    {
+        image:"https://giovannihouse.com/giovacontent/uploads/2019/05/Babbi-Tiramisu-300x300.jpg",
+        title:"Tiramisu"
+    }
+    ,
+    {
+        image:"https://tb-static.uber.com/prod/image-proc/processed_images/21d085fcf03f66b746f6ef93ccf9c87a/4218ca1d09174218364162cd0b1a8cc1.jpeg",
+        title:'Shawarma'
+    }
+    ,
+    {
+        image:"https://images.aws.nestle.recipes/resized/0a0717810b73a1672a029c29788e557b_creamy_alfredo_pasta_long_left_1080_850.jpg",
+        title:"Pasta"
+    }
+    ,
+    {
+        image:"https://hips.hearstapps.com/hmg-prod/images/air-fryer-chicken-wings-lead-65b9452e239b8.jpg",
+        title:"Chicken Wings"
+    }
+
+]
