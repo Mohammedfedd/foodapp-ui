@@ -130,7 +130,7 @@ const OrdersTable = ({ isDashboard, name }) => {
                       {item?.customer.email}
                     </TableCell>
 
-                    <TableCell>₹{item?.totalAmount}</TableCell>
+                    <TableCell>{item?.totalAmount}DH</TableCell>
                     
                     <TableCell className="">
                       {item.items.map((orderItem) => (
