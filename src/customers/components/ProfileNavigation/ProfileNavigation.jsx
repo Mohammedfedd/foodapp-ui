@@ -11,6 +11,7 @@ import { logout } from "../../../State/Authentication/Action";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import EventIcon from "@mui/icons-material/Event";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import {clearCartAction} from "../../../State/Customers/Cart/cart.action";
 
 const menu = [
   { title: "Profile", icon: <AccountBoxIcon /> },
@@ -26,7 +27,9 @@ const ProfileNavigation = ({ handleClose, open }) => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
+    dispatch(clearCartAction);
     dispatch(logout());
+    
   };
 
   const handleNavigate = (item) => {
@@ -34,6 +37,7 @@ const ProfileNavigation = ({ handleClose, open }) => {
     if (item.title === "Logout") {
       handleLogout();
       navigate("/");
+
     }
     if (item.title === "Profile") {
       navigate("/my-profile");
